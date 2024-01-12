@@ -854,11 +854,14 @@ class IMAPRepository(BaseRepository):
             if self.account.utf_8_support:
                 foldername = imaputil.utf8_IMAP(foldername)
 
-            result = imapobj.create(foldername)
-            if result[0] != 'OK':
-                msg = "Folder '%s'[%s] could not be created. "\
-                      "Server responded: %s" % (foldername, self, str(result))
-                raise OfflineImapError(msg, OfflineImapError.ERROR.FOLDER)
+            try:
+                imapobj.select(foldername)
+            except:
+                result = imapobj.create(foldername)
+                if result[0] != 'OK':
+                    msg = "Folder '%s'[%s] could not be created. "\
+                          "Server responded: %s" % (foldername, self, str(result))
+                    raise OfflineImapError(msg, OfflineImapError.ERROR.FOLDER)
         finally:
             self.imapserver.releaseconnection(imapobj)
 
