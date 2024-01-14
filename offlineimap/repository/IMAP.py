@@ -781,12 +781,8 @@ class IMAPRepository(BaseRepository):
     def deletefolder(self, foldername):
         """Delete a folder on the IMAP server."""
 
-        # escape quotes in foldername
-        foldername = foldername.replace('"','\\"')
-
         # Folder names with spaces requires quotes
-        if ' ' in foldername or '"' in foldername:
-            foldername = '"' + foldername + '"'
+        foldername = imaputil.quote(foldername)
 
         if self.account.utf_8_support:
             foldername = imaputil.utf8_IMAP(foldername)
@@ -851,12 +847,8 @@ class IMAPRepository(BaseRepository):
             return
         imapobj = self.imapserver.acquireconnection()
         try:
-            # escape quotes in foldername
-            foldername = foldername.replace('"','\\"')
-
             # Folder names with spaces requires quotes
-            if ' ' in foldername or '"' in foldername:
-                foldername = '"' + foldername + '"'
+            foldername = imaputil.quote(foldername)
 
             if self.account.utf_8_support:
                 foldername = imaputil.utf8_IMAP(foldername)
