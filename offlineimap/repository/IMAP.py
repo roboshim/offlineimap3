@@ -825,12 +825,12 @@ class IMAPRepository(BaseRepository):
                         for n in range(len(parts))]
         for folder_path in folder_paths:
             if not imaputil.foldername_to_imapname(folder_path) in [ f.getfullIMAPname() for f in self.getfolders() ] :
-            try:
-                self.makefolder_single(folder_path)
-            except OfflineImapError as exc:
-                reasonLower = exc.reason.lower()  # Handle reasons '[ALREADYEXISTS]' and 'Mailbox already exists!' @chris001
-                if not ('already' in reasonLower and 'exists' in reasonLower):
-                    raise
+                try:
+                    self.makefolder_single(folder_path)
+                except OfflineImapError as exc:
+                    reasonLower = exc.reason.lower()  # Handle reasons '[ALREADYEXISTS]' and 'Mailbox already exists!' @chris001
+                    if not ('already' in reasonLower and 'exists' in reasonLower):
+                        raise
 
     def makefolder_single(self, foldername):
         """
