@@ -728,7 +728,9 @@ class IMAPFolder(BaseFolder):
                             "repository '%s' failed (abort). " \
                             "Server responded: %s %s\n" % \
                             (msg_id, self, self.getrepository(), typ, dat)
-                        raise OfflineImapError(err_msg, OfflineImapError.ERROR.REPO)
+                        self.ui.warn(err_msg)
+                        return -1
+                        # raise OfflineImapError(err_msg, OfflineImapError.ERROR.REPO)
                     retry_left = 0  # Mark as success.
                 except imapobj.abort as e:
                     # Connection has been reset, release connection and retry.
